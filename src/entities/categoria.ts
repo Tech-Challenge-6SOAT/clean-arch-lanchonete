@@ -1,4 +1,4 @@
-type CategoriaEnum = 'Lanche' | 'Acompanhamento' | 'Bebida' | 'Sobremesa'
+export type CategoriaEnum = 'Lanche' | 'Acompanhamento' | 'Bebida' | 'Sobremesa'
 
 export class Categoria {
   constructor (
