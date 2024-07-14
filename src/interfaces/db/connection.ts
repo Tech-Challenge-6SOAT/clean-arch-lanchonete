@@ -1,8 +1,8 @@
 export interface DbConnection {
-  buscar<T>(params: Object): Promise<T[]>
-  buscarUm<T>(params: Object): Promise<T>
-  criar<T>(params: Object): Promise<T>
+  buscar<T = any>(params: Object): Promise<T[]>
+  buscarUm<T = any>(params: Object): Promise<T | null>
+  criar<T = any>(params: Object): Promise<T>
   excluir(id: string): Promise<void>
-  buscarEmConjuntoCom<T>(params: Object, juntarCom: string): Promise<T[]>
+  buscarEmConjuntoCom<T = any>(params: Object, juntarCom: string): Promise<T[]>
 }
 

@@ -1,0 +1,49 @@
+import { HttpRequest, HttpResponse } from "../../interfaces/http";
+import { ClienteUseCase } from "../../usecases/cliente";
+
+export class ClienteController {
+  constructor (
+    private readonly clienteUseCase: ClienteUseCase
+  ) {}
+
+  async criar (request: HttpRequest): Promise<HttpResponse> {
+    try {
+      const { cpf, nome, email } = request.body
+
+      if (!cpf && !email) {
+        return {
+          data: {
+            err: 'CPF ou Email são obrigatórios!'
+          },
+          statusCode: 400
+        }
+      }
+
+      const cliente = await this.clienteUseCase.criar({
+        nome,
+        email,
+        cpf
+      })
+
+      return {
+        data: {
+          cliente: {
+            id: cliente.id,
+            nome: cliente.nome,
+            cpf: cliente.cpf,
+            email: cliente.email
+          }
+        },
+        statusCode: 201
+      }
+    } catch (err: any) {
+      return {
+        data: {
+          err: err?.message
+        },
+        statusCode: 500
+      }
+    }
+  }
+}
+

@@ -19,7 +19,7 @@ export class ClienteGateway implements IClienteGateway {
     )
   }
 
-  async buscarCliente(busca: { cpf?: CPF, email?: Email }): Promise<Cliente> {
+  async buscarCliente(busca: { cpf?: CPF, email?: Email }): Promise<Cliente | null> {
     if (!busca.cpf && busca.email) {
       throw new Error('CPF ou Email devem ser fornecidos')
     }
@@ -33,7 +33,7 @@ export class ClienteGateway implements IClienteGateway {
     return cliente
   }
 
-  private async _buscaHelper (busca: Object): Promise<Cliente> {
+  private async _buscaHelper (busca: Object): Promise<Cliente | null> {
     const cliente = await this.dbConnection.buscarUm<{
       _id: string,
       nome: string,
@@ -42,7 +42,7 @@ export class ClienteGateway implements IClienteGateway {
     }>(busca)
 
     if (!cliente) {
-      throw new Error('CPF inválido')
+      return null
     }
 
     return new Cliente(

@@ -8,7 +8,7 @@ export class ProdutoGateway implements IProdutoGateway {
     private readonly dbConnection: DbConnection
   ) {}
 
-  async buscarProdutoPorId(id: string): Promise<Produto> {
+  async buscarProdutoPorId(id: string): Promise<Produto | null> {
     const produto = await this.dbConnection.buscarUm<{
       _id: string,
       categoria: string,
@@ -16,6 +16,10 @@ export class ProdutoGateway implements IProdutoGateway {
       preco: number,
       descricao: string
     }>({ _id: id })
+
+    if (!produto) {
+      return null
+    }
 
     return new Produto(
       produto._id,

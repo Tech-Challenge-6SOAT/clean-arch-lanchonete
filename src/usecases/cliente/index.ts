@@ -1,0 +1,34 @@
+import { Cliente } from "../../entities/cliente";
+import { ClienteGateway } from "../../gateways/cliente";
+import { CPF } from "../../value-objects/cpf";
+import { Email } from "../../value-objects/email";
+
+export class ClienteUseCase {
+  constructor (
+    private readonly clienteGateway: ClienteGateway
+  ) {}
+
+  async criar (params: Omit<Cliente, "id">): Promise<Cliente> {
+    const cliente = await this.clienteGateway.buscarCliente(params)
+    if (cliente) {
+      return cliente
+    }
+
+    const validParams = {
+      cpf: params.cpf,
+      email: params.email,
+      nome: params.nome
+    }
+
+    if (params.cpf) {
+      validParams.cpf = new CPF(String(params.cpf))
+    }
+
+    if (params.email) {
+      validParams.email = new Email(String(params.email))
+    }
+
+    const createdCliente = await this.clienteGateway.criarCliente(validParams)
+    return createdCliente
+  }
+}
