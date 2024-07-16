@@ -27,13 +27,14 @@ export class ProdutoController {
         id,
       });
 
-      if (!produto)
+      if (!produto) {
         return {
           data: {
             message: "Produto não encontrado",
           },
-          statusCode: 204,
+          statusCode: 200,
         };
+      }
 
       return {
         data: {
