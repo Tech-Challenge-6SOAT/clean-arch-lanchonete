@@ -8,7 +8,7 @@ export class PedidoGateway implements IPedidoGateway {
     private readonly dbConnection: DbConnection
   ) {}
 
-  async buscarPedidos():  Promise<PedidoProdutos[]> {
+  async buscarPedidos(): Promise<PedidoProdutos[]> {
     const pedidos = await this.dbConnection.buscar<Pedido>({})
 
     return pedidos.map(pedido => {
