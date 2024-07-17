@@ -1,4 +1,4 @@
-type StatusEnum = 'Recebido' | 'Em preparação' | 'Pronto' | 'Finalizado'
+export type StatusEnum = 'Recebido' | 'Em preparação' | 'Pronto' | 'Finalizado'
 
 export class Status {
   constructor (

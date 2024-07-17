@@ -14,4 +14,14 @@ export const pedidoRoutes = async (app: FastifyInstance) => {
     const response = await pedidoController.buscarPedidos(request)
     return reply.status(response.statusCode).send(response.data)
   })
+  
+  app.get('/pedido/:id/status-pagamento', {}, async function (request, reply) {
+    const response = await pedidoController.statusPagamento(request)
+    return reply.status(response.statusCode).send(response.data)
+  })
+  
+  app.patch('/pedido/:id/status', {}, async function (request, reply) {
+    const response = await pedidoController.atualizarStatusPedido(request)
+    return reply.status(response.statusCode).send(response.data)
+  })
 }

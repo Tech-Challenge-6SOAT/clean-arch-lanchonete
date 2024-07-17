@@ -4,5 +4,6 @@ export interface DbConnection {
   criar<T = any>(params: Object): Promise<T>
   excluir(id: string): Promise<void>
   buscarEmConjuntoCom<T = any>(params: Object, juntarCom: string): Promise<T[]>
+  editar<T = any>(params: Object): Promise<T>
 }
 
