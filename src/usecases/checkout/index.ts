@@ -14,7 +14,7 @@ export class CheckoutUseCase {
     ) { }
 
     async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: string }): Promise<string> {
-        const cliente = cpf ? await this._formatarCliente(cpf) : undefined;
+        const cliente = cpf ? await this._formatarCliente(cpf) : null;
         const produtosPedido = await this._formatarProdutosPedido(produtos)
         const totalPedido = this._calcularTotalPedido(produtosPedido)
 
