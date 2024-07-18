@@ -3,7 +3,7 @@ import { Produto } from "../entities/produto"
 import { Status } from "../entities/status"
 
 export type PedidoProdutos = {
-  cliente: Cliente
+  cliente?: Cliente
   produtos: {
     produto: Produto
     quantidade: number

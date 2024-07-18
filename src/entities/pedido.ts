@@ -5,7 +5,7 @@ import { Status } from "./status";
 export class Pedido {
   constructor(
     private readonly _id: string,
-    private readonly _cliente: Cliente,
+    private readonly _cliente: Cliente | undefined,
     private readonly _produtos: { produto: Produto, quantidade: number }[],
     private readonly _status: Status,
     private readonly _total: number,
@@ -16,7 +16,7 @@ export class Pedido {
     return this._id
   }
 
-  get cliente(): Cliente {
+  get cliente(): Cliente | undefined {
     return this._cliente
   }
 
