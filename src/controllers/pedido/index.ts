@@ -1,8 +1,12 @@
 import { HttpRequest, HttpResponse } from "../../interfaces/http";
+import { CheckoutUseCase } from "../../usecases/checkout";
 import { PedidoUseCase } from "../../usecases/pedido";
 
 export class PedidoController {
-  constructor(private readonly pedidoUseCase: PedidoUseCase) { }
+  constructor(
+    private readonly pedidoUseCase: PedidoUseCase,
+    private readonly checkoutUseCase: CheckoutUseCase
+  ) { }
 
   async buscarPedidos(request: HttpRequest): Promise<HttpResponse> {
     try {
@@ -60,6 +64,28 @@ export class PedidoController {
           statusPagamento,
         },
         statusCode: 200,
+      };
+    } catch (err: any) {
+      return {
+        data: {
+          err: err?.message,
+        },
+        statusCode: 500,
+      };
+    }
+  }
+
+  async checkout(request: HttpRequest): Promise<HttpResponse> {
+    try {
+      const { produtos, cpf } = request.body;
+
+      const senha = await this.checkoutUseCase.checkout({ produtos, cpf });
+
+      return {
+        data: {
+          senha,
+        },
+        statusCode: 201,
       };
     } catch (err: any) {
       return {

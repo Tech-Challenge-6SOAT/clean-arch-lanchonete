@@ -11,7 +11,7 @@ export class PedidoUseCase {
         return this.pedidoGateway.buscarPedidos()
     }
 
-    async criar({ cliente, produtos, total, status, senha }: Pedido): Promise<Pedido> {
+    async criar({ cliente, produtos, total, status, senha }: Omit<Pedido, "id">): Promise<Pedido> {
         return this.pedidoGateway.criar({
             cliente,
             produtos,
