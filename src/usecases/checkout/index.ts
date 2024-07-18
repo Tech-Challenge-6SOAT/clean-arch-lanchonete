@@ -1,4 +1,3 @@
-import { Cliente } from "../../entities/cliente";
 import { Produto } from "../../entities/produto";
 import { Status } from "../../entities/status";
 import { ClienteGateway } from "../../gateways";
@@ -7,6 +6,8 @@ import { CPF } from "../../value-objects/cpf";
 import { PedidoUseCase } from "../pedido";
 
 export class CheckoutUseCase {
+    private _produtos: { produto: Produto, quantidade: number }[] = [];
+
     constructor(
         private readonly pedidoUseCase: PedidoUseCase,
         private readonly produtoGateway: ProdutoGateway,
@@ -14,14 +15,13 @@ export class CheckoutUseCase {
     ) { }
 
     async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: string }): Promise<string> {
-        const cliente = cpf ? await this._formatarCliente(cpf) : null;
-        const produtosPedido = await this._formatarProdutosPedido(produtos)
-        const totalPedido = this._calcularTotalPedido(produtosPedido)
+        const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf: new CPF(cpf) }) : null;
+        await this._adicionarProdutos(produtos)
 
         const pedidoCriado = await this.pedidoUseCase.criar({
             cliente,
-            produtos: produtosPedido,
-            total: totalPedido,
+            produtos: this._produtos,
+            total: this._calcularTotalPedido(this._produtos),
             status: new Status('Recebido'),
             senha: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
         })
@@ -32,24 +32,14 @@ export class CheckoutUseCase {
         return pedidoCriado.senha;
     }
 
-    private async _formatarCliente(cpf: string): Promise<Cliente> {
-        const cliente = await this.clienteGateway.buscarCliente({ cpf: new CPF(cpf) });
-        if (!cliente) {
-            throw new Error('Cliente não encontrado')
-        }
-        return new Cliente(cliente.id, cliente.nome, cliente.email, cliente.cpf)
-    }
-
-    private async _formatarProdutosPedido(produtos: { id: string, quantidade: number }[]): Promise<{ produto: Produto, quantidade: number }[]> {
+    private async _adicionarProdutos(produtos: { id: string, quantidade: number }[]): Promise<void> {
+        if (!produtos?.length) throw new Error('Produtos não informados')
         const produtosPromises = produtos.map(async ({ id, quantidade }) => {
             const produto = await this.produtoGateway.buscarProdutoPorId(id);
-            if (!produto) {
-                throw new Error('Produto não encontrado')
-            }
+            if (!produto) throw new Error('Produto não encontrado')
             return { produto: new Produto(produto.id, produto.categoria, produto.nome, produto.preco, produto.descricao), quantidade }
         });
-
-        return Promise.all(produtosPromises);
+        this._produtos = await Promise.all(produtosPromises);
     }
 
     private _calcularTotalPedido(produtosPedido: { produto: Produto, quantidade: number }[]): number {
