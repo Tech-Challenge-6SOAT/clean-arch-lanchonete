@@ -7,8 +7,6 @@ import { CPF } from "../../value-objects/cpf";
 import { PedidoUseCase } from "../pedido";
 
 export class CheckoutUseCase {
-    // private _cliente: Cliente | undefined;
-
     constructor(
         private readonly pedidoUseCase: PedidoUseCase,
         private readonly produtoGateway: ProdutoGateway,
@@ -16,15 +14,7 @@ export class CheckoutUseCase {
     ) { }
 
     async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: string }): Promise<string> {
-        let cliente;
-        if (cpf) {
-            const clienteEncontrado = await this.clienteGateway.buscarCliente({ cpf: new CPF(cpf) });
-            if (!clienteEncontrado) {
-                throw new Error('Cliente não encontrado')
-            }
-            cliente = new Cliente(clienteEncontrado.id, clienteEncontrado.nome, clienteEncontrado.email, clienteEncontrado.cpf)
-        }
-
+        const cliente = cpf ? await this._formatarCliente(cpf) : undefined;
         const produtosPedido = await this._formatarProdutosPedido(produtos)
         const totalPedido = this._calcularTotalPedido(produtosPedido)
 
@@ -39,7 +29,15 @@ export class CheckoutUseCase {
         // TO DO: Processar pagamento
         // TO DO: Atualizar status do pagamento do pedido
 
-        return pedidoCriado.senha
+        return pedidoCriado.senha;
+    }
+
+    private async _formatarCliente(cpf: string): Promise<Cliente> {
+        const cliente = await this.clienteGateway.buscarCliente({ cpf: new CPF(cpf) });
+        if (!cliente) {
+            throw new Error('Cliente não encontrado')
+        }
+        return new Cliente(cliente.id, cliente.nome, cliente.email, cliente.cpf)
     }
 
     private async _formatarProdutosPedido(produtos: { id: string, quantidade: number }[]): Promise<{ produto: Produto, quantidade: number }[]> {
