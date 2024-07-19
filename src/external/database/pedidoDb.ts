@@ -53,7 +53,7 @@ export class PedidoDb implements DbConnection {
       { $sort: { statusCustomOrder: 1, createdAt: 1 } },
     ];
 
-    return PedidoModel.aggregate(pipeline);
+    return PedidoModel.aggregate(pipeline as []);
   }
 
   async excluir(id: string): Promise<void> { }

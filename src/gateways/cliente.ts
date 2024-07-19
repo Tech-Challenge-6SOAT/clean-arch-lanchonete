@@ -10,7 +10,11 @@ export class ClienteGateway implements IClienteGateway {
   ) {}
 
   async criarCliente(cliente: Omit<Cliente, "id">): Promise<Cliente> {
-    const createdCliente = await this.dbConnection.criar<{ _id: string }>(cliente)
+    const createdCliente = await this.dbConnection.criar<{ _id: string }>({
+      nome: cliente.nome,
+      email: cliente.email?.getValue(),
+      cpf: cliente.cpf?.getValue(),
+    })
     return new Cliente(
       createdCliente._id,
       cliente.nome,

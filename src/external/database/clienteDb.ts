@@ -3,10 +3,9 @@ import { ClienteModel } from "./mongodb/models";
 
 export class ClienteDb implements DbConnection {
   async criar<T = any>(params: Object): Promise<T> {
-    return {
-      _id: 'any id',
-      ...params
-    } as T
+    const cliente = new ClienteModel(params);
+    await cliente.save();
+    return { _id: cliente._id } as T
   }
 
   async buscar<T = any>(params: Object): Promise<T[]> {
