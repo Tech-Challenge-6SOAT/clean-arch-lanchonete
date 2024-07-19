@@ -3,19 +3,24 @@ import { Produto } from "./produto";
 import { Status } from "./status";
 
 export class Pedido {
-  constructor (
-    private readonly _cliente: Cliente,
-    private readonly _produtos: Produto[],
+  constructor(
+    private readonly _id: string,
+    private readonly _cliente: Cliente | null,
+    private readonly _produtos: { produto: Produto, quantidade: number }[],
     private readonly _status: Status,
     private readonly _total: number,
     private readonly _senha: string
-  ) {}
+  ) { }
 
-  get cliente(): Cliente {
+  get id(): string {
+    return this._id
+  }
+
+  get cliente(): Cliente | null {
     return this._cliente
   }
 
-  get produtos(): Produto[] {
+  get produtos(): { produto: Produto, quantidade: number }[] {
     return this._produtos
   }
 

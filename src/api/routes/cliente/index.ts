@@ -1,12 +1,12 @@
 import { FastifyInstance } from "fastify";
 import { ClienteController } from "../../../controllers/cliente";
 import { ClienteGateway } from "../../../gateways/cliente";
-import { FakeDb } from "../../../external/fake-db";
+import { ClienteDbConnection } from "../../../external/database";
 import { ClienteUseCase } from "../../../usecases/cliente";
 
 export const clienteRoutes = async (app: FastifyInstance) => {
-  const dbConnection = new FakeDb()
-  const clienteGateway = new ClienteGateway(dbConnection)
+  const clienteDbConnection = new ClienteDbConnection()
+  const clienteGateway = new ClienteGateway(clienteDbConnection)
   const clienteUseCase = new ClienteUseCase(clienteGateway)
   const clienteController = new ClienteController(clienteUseCase)
 

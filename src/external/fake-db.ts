@@ -21,4 +21,11 @@ export class FakeDb implements DbConnection {
   async buscarEmConjuntoCom<T = any>(params: Object, juntarCom: string): Promise<T[]> {
       return []
   }
+
+  async editar<T = any>(params: Object): Promise<T | null> {
+    return {
+      _id: 'any id',
+      ...params
+    } as T
+  }
 }
