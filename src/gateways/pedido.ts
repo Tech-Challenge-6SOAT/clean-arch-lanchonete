@@ -20,10 +20,8 @@ export class PedidoGateway implements IPedidoGateway {
   }
 
   async buscarPedido(id: string): Promise<PedidoProdutos | null> {
-    const pedido = await this.dbConnection.buscarUm<Pedido>({ id });
-
+    const pedido = await this.dbConnection.buscarUm<Pedido>({ _id: id});
     if (!pedido) return null;
-
     return {
       cliente: pedido.cliente,
       produtos: pedido.produtos,
@@ -47,8 +45,9 @@ export class PedidoGateway implements IPedidoGateway {
     );
   }
 
-  async editar(params: { id: string; status: Status }): Promise<Pedido> {
+  async editar(params: { id: string; status: Status }): Promise<Pedido | null> {
     const produtoAtualizado = await this.dbConnection.editar<Pedido>(params);
+    if (!produtoAtualizado) return null;
     return new Pedido(
       produtoAtualizado.id,
       produtoAtualizado.cliente,

@@ -21,7 +21,7 @@ export class PedidoUseCase {
         })
     }
 
-    async atualizarStatusPedido(params: { id: string, status: Status }): Promise<PedidoProdutos> {
+    async atualizarStatusPedido(params: { id: string, status: Status }): Promise<PedidoProdutos | null> {
         const pedido = await this.pedidoGateway.buscarPedido(params.id)
         if (!pedido) {
             throw new Error('Pedido não encontrado')

@@ -23,7 +23,7 @@ export class ProdutoDb implements DbConnection {
     return []
   }
 
-  async editar<T = any>(params: Object): Promise<T> {
+  async editar<T = any>(params: Object): Promise<T | null> {
     return {
       _id: 'any id',
       ...params

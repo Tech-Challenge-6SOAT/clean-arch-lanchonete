@@ -59,17 +59,14 @@ export class PedidoDb implements DbConnection {
   async excluir(id: string): Promise<void> { }
 
   async buscarUm<T = any>(params: Object): Promise<T | null> {
-    return null
+    return PedidoModel.findOne(params)
   }
 
   async buscarEmConjuntoCom<T = any>(params: Object, juntarCom: string): Promise<T[]> {
     return []
   }
 
-  async editar<T = any>(params: Object): Promise<T> {
-    return {
-      _id: 'any id',
-      ...params
-    } as T
+  async editar<T = any>(params: { id: string, status: string }): Promise<T | null> {
+    return PedidoModel.findByIdAndUpdate(params.id, { status: params.status }, { new: true })
   }
 }
