@@ -1,5 +1,5 @@
 import { Pedido } from "../../entities/pedido";
-import { StatusEnum } from "../../entities/status";
+import { Status } from "../../entities/status";
 import { PedidoGateway } from "../../gateways/pedido";
 import { PedidoProdutos } from "../../types/pedido-produtos";
 
@@ -21,7 +21,7 @@ export class PedidoUseCase {
         })
     }
 
-    async atualizarStatusPedido(params: { id: string, status: StatusEnum }): Promise<PedidoProdutos> {
+    async atualizarStatusPedido(params: { id: string, status: Status }): Promise<PedidoProdutos> {
         const pedido = await this.pedidoGateway.buscarPedido(params.id)
         if (!pedido) {
             throw new Error('Pedido não encontrado')

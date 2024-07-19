@@ -1,5 +1,5 @@
 import { Pedido } from "../entities/pedido";
-import { StatusEnum } from "../entities/status";
+import { Status } from "../entities/status";
 import { DbConnection } from "../interfaces/db/connection";
 import { IPedidoGateway } from "../interfaces/gateways/pedido";
 import { PedidoProdutos } from "../types/pedido-produtos";
@@ -47,7 +47,7 @@ export class PedidoGateway implements IPedidoGateway {
     );
   }
 
-  async editar(params: { id: string; status: StatusEnum }): Promise<Pedido> {
+  async editar(params: { id: string; status: Status }): Promise<Pedido> {
     const produtoAtualizado = await this.dbConnection.editar<Pedido>(params);
     return new Pedido(
       produtoAtualizado.id,
