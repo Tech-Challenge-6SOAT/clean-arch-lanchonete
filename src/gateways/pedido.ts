@@ -15,6 +15,7 @@ export class PedidoGateway implements IPedidoGateway {
       status: pedido.status,
       total: pedido.total,
       senha: pedido.senha,
+      pagamentoStatus: pedido.pagamentoStatus
     }));
   }
 
@@ -27,12 +28,13 @@ export class PedidoGateway implements IPedidoGateway {
       status: pedido.status,
       total: pedido.total,
       senha: pedido.senha,
+      pagamentoStatus: pedido.pagamentoStatus
     };
   }
 
   async criar(pedido: Omit<Pedido, "id">): Promise<Pedido> {
     const produtoCriado = await this.dbConnection.criar<{ _id: string }>(
-      {...pedido, status: pedido.status.status},
+      {...pedido, status: pedido.status.status, pagamentoStatus: pedido.pagamentoStatus.status},
     );
     return new Pedido(
       produtoCriado._id,
@@ -40,7 +42,8 @@ export class PedidoGateway implements IPedidoGateway {
       pedido.produtos,
       pedido.status,
       pedido.total,
-      pedido.senha
+      pedido.senha,
+      pedido.pagamentoStatus
     );
   }
 
@@ -53,7 +56,8 @@ export class PedidoGateway implements IPedidoGateway {
       produtoAtualizado.produtos,
       produtoAtualizado.status,
       produtoAtualizado.total,
-      produtoAtualizado.senha
+      produtoAtualizado.senha,
+      produtoAtualizado.pagamentoStatus
     );
   }
 }

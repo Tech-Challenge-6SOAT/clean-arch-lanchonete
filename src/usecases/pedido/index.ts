@@ -1,3 +1,4 @@
+import { PagamentoStatus } from "../../entities/pagamentoStatus";
 import { Pedido } from "../../entities/pedido";
 import { Status } from "../../entities/status";
 import { PedidoGateway } from "../../gateways/pedido";
@@ -11,13 +12,14 @@ export class PedidoUseCase {
         return this.pedidoGateway.buscarPedidos()
     }
 
-    async criar({ cliente, produtos, total, status, senha }: Omit<Pedido, "id">): Promise<Pedido> {
+    async criar({ cliente, produtos, total, status, senha, pagamentoStatus }: Omit<Pedido, "id">): Promise<Pedido> {
         return this.pedidoGateway.criar({
             cliente,
             produtos,
             total,
             status,
             senha,
+            pagamentoStatus
         })
     }
 
@@ -30,8 +32,11 @@ export class PedidoUseCase {
         return this.pedidoGateway.editar({ id: params.id, filter: { status: params.status } })
     }
 
-    async statusPagamento(id: string): Promise<string> {
-        const statusPagamento = "Aprovado"; // Recusado // Pendente   
-        return statusPagamento
+    async statusPagamento(id: string): Promise<PagamentoStatus> {
+        const pedido = await this.pedidoGateway.buscarPedido(id)
+        if (!pedido) {
+            throw new Error('Pedido não encontrado')
+        }
+        return pedido.pagamentoStatus
     }
 }

@@ -1,3 +1,4 @@
+import { PagamentoStatus } from "../../entities/pagamentoStatus";
 import { Produto } from "../../entities/produto";
 import { Status } from "../../entities/status";
 import { ClienteGateway } from "../../gateways";
@@ -24,6 +25,7 @@ export class CheckoutUseCase {
             total: this._calcularTotalPedido(this._produtos),
             status: new Status('Recebido'),
             senha: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
+            pagamentoStatus: new PagamentoStatus('Pendente')
         })
 
         // TO DO: Processar pagamento

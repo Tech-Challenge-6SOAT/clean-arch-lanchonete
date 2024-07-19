@@ -1,4 +1,5 @@
 import { Cliente } from "./cliente";
+import { PagamentoStatus } from "./pagamentoStatus";
 import { Produto } from "./produto";
 import { Status } from "./status";
 
@@ -9,7 +10,8 @@ export class Pedido {
     private readonly _produtos: { produto: Produto, quantidade: number }[],
     private readonly _status: Status,
     private readonly _total: number,
-    private readonly _senha: string
+    private readonly _senha: string,
+    private readonly _pagamentoStatus: PagamentoStatus
   ) { }
 
   get id(): string {
@@ -34,5 +36,9 @@ export class Pedido {
 
   get senha(): string {
     return this._senha
+  }
+
+  get pagamentoStatus(): PagamentoStatus {
+    return this._pagamentoStatus
   }
 }
