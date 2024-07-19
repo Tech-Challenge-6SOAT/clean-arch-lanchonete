@@ -1,15 +1,17 @@
 import { FastifyInstance } from "fastify";
 import { PedidoController } from "../../../controllers/pedido";
 import { ClienteGateway, PedidoGateway, ProdutoGateway } from "../../../gateways";
-import { FakeDb } from "../../../external/fake-db";
+import { PedidoDb, ProdutoDb, ClienteDb } from "../../../external/database";
 import { PedidoUseCase } from "../../../usecases/pedido";
 import { CheckoutUseCase } from "../../../usecases/checkout";
 
 export const pedidoRoutes = async (app: FastifyInstance) => {
-  const dbConnection = new FakeDb()
-  const pedidoGateway = new PedidoGateway(dbConnection)
-  const produtoGateway = new ProdutoGateway(dbConnection)
-  const clienteGateway = new ClienteGateway(dbConnection)
+  const dbConnectionPedido = new PedidoDb()
+  const dbConnectionProduto = new ProdutoDb()
+  const dbConnectionCliente = new ClienteDb()
+  const pedidoGateway = new PedidoGateway(dbConnectionPedido)
+  const produtoGateway = new ProdutoGateway(dbConnectionProduto)
+  const clienteGateway = new ClienteGateway(dbConnectionCliente)
   const pedidoUseCase = new PedidoUseCase(pedidoGateway)
   const checkoutUseCase = new CheckoutUseCase(pedidoUseCase, produtoGateway, clienteGateway)
   const pedidoController = new PedidoController(pedidoUseCase, checkoutUseCase)
