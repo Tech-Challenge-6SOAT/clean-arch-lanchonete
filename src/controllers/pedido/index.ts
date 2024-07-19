@@ -79,12 +79,10 @@ export class PedidoController {
     try {
       const { produtos, cpf } = request.body;
 
-      const senha = await this.checkoutUseCase.checkout({ produtos, cpf });
+      const data = await this.checkoutUseCase.checkout({ produtos, cpf });
 
       return {
-        data: {
-          senha,
-        },
+        data,
         statusCode: 201,
       };
     } catch (err: any) {

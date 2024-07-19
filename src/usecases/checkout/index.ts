@@ -14,7 +14,7 @@ export class CheckoutUseCase {
         private readonly clienteGateway: ClienteGateway
     ) { }
 
-    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<string> {
+    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string }> {
         const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf }) : null;
         await this._adicionarProdutos(produtos)
 
@@ -29,7 +29,7 @@ export class CheckoutUseCase {
         // TO DO: Processar pagamento
         // TO DO: Atualizar status do pagamento do pedido
 
-        return pedidoCriado.senha;
+        return { id: pedidoCriado.id, senha: pedidoCriado.senha };
     }
 
     private async _adicionarProdutos(produtos: { id: string, quantidade: number }[]): Promise<void> {
