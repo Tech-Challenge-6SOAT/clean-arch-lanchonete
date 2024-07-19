@@ -32,6 +32,12 @@ const Schema = new mongoose.Schema({
   },
   senha: {
     type: String,
+    required: true,
+  },
+  pagamentoStatus: {
+    type: String,
+    required: true,
+    enum: ['Aprovado', 'Recusado', 'Pendente'] 
   },
 }, {
   timestamps: true,
