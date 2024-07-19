@@ -35,7 +35,7 @@ export class PedidoGateway implements IPedidoGateway {
 
   async criar(pedido: Omit<Pedido, "id">): Promise<Pedido> {
     const produtoCriado = await this.dbConnection.criar<{ _id: string }>(
-      pedido
+      {...pedido, status: pedido.status.status},
     );
     return new Pedido(
       produtoCriado._id,
