@@ -1,3 +1,3 @@
-export * from './clienteDb';
-export * from './pedidoDb';
-export * from './produtoDb';
+export * from './clienteDbConnection';
+export * from './pedidoDbConnection';
+export * from './produtoDbConnection';

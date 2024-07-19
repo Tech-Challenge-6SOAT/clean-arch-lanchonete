@@ -1,7 +1,7 @@
 import { DbConnection } from "../../interfaces/db/connection";
 import { PedidoModel } from "./mongodb/models";
 
-export class PedidoDb implements DbConnection {
+export class PedidoDbConnection implements DbConnection {
   async criar<T = any>(params: Object): Promise<T> {
     const pedido = new PedidoModel(params);
     await pedido.save();
@@ -56,7 +56,9 @@ export class PedidoDb implements DbConnection {
     return PedidoModel.aggregate(pipeline as []);
   }
 
-  async excluir(id: string): Promise<void> { }
+  async excluir(id: string): Promise<void> {
+    await PedidoModel.findByIdAndDelete({ _id: id });
+  }
 
   async buscarUm<T = any>(params: Object): Promise<T | null> {
     return PedidoModel.findOne(params)
@@ -66,7 +68,8 @@ export class PedidoDb implements DbConnection {
     return []
   }
 
-  async editar<T = any>(params: { id: string, status: string }): Promise<T | null> {
-    return PedidoModel.findByIdAndUpdate(params.id, { status: params.status }, { new: true })
+  async editar<T = any>(params: { id: string, filter: object }): Promise<T | null> {
+    const { id, filter } = params
+    return PedidoModel.findByIdAndUpdate(id, filter, { new: true })
   }
 }

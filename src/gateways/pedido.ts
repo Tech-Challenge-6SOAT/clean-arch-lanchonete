@@ -1,5 +1,4 @@
 import { Pedido } from "../entities/pedido";
-import { Status } from "../entities/status";
 import { DbConnection } from "../interfaces/db/connection";
 import { IPedidoGateway } from "../interfaces/gateways/pedido";
 import { PedidoProdutos } from "../types/pedido-produtos";
@@ -45,7 +44,7 @@ export class PedidoGateway implements IPedidoGateway {
     );
   }
 
-  async editar(params: { id: string; status: Status }): Promise<Pedido | null> {
+  async editar(params: { id: string; filter: object }): Promise<Pedido | null> {
     const produtoAtualizado = await this.dbConnection.editar<Pedido>(params);
     if (!produtoAtualizado) return null;
     return new Pedido(
