@@ -24,13 +24,11 @@ export class CheckoutUseCase {
             total: this._calcularTotalPedido(this._produtos),
             status: new Status('Recebido'),
             senha: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
-            pagamentoStatus: new PagamentoStatus('Pendente')
         })
 
-        const qrcode = await this.pagamentoUseCase.gerarPagamento(pedidoCriado);
+        const { transacao, qrcode } = await this.pagamentoUseCase.gerarPagamento(pedidoCriado);
 
-        // TO DO: Processar pagamento
-        // TO DO: Atualizar status do pagamento do pedido
+        await this.pedidoUseCase.adicionarTransacao({ id: pedidoCriado.id, transacao});
 
         return { id: pedidoCriado.id, senha: pedidoCriado.senha, qrcode };
     }

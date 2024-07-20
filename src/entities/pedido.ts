@@ -1,7 +1,7 @@
 import { Cliente } from "./cliente";
-import { PagamentoStatus } from "./pagamentoStatus";
 import { Produto } from "./produto";
 import { Status } from "./status";
+import { Transacao } from "./transacao";
 
 export class Pedido {
   constructor(
@@ -11,7 +11,7 @@ export class Pedido {
     private readonly _status: Status,
     private readonly _total: number,
     private readonly _senha: string,
-    private readonly _pagamentoStatus: PagamentoStatus
+    private readonly _transacao: Transacao | null
   ) { }
 
   get id(): string {
@@ -38,7 +38,7 @@ export class Pedido {
     return this._senha
   }
 
-  get pagamentoStatus(): PagamentoStatus {
-    return this._pagamentoStatus
+  get transacao(): Transacao | null {
+    return this._transacao
   }
 }

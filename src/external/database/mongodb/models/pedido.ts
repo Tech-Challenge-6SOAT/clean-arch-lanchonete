@@ -34,10 +34,9 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pagamentoStatus: {
-    type: String,
-    required: true,
-    enum: ['Aprovado', 'Recusado', 'Pendente'] 
+  transacao: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'transacoes',
   },
 }, {
   timestamps: true,

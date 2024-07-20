@@ -1,4 +1,4 @@
-import { PagamentoStatus, Pedido } from "../../entities";
+import { PagamentoStatus, Pedido, Transacao } from "../../entities";
 import { TransacaoGateway, PagamentoGateway } from "../../gateways";
 
 export class PagamentoUseCase {
@@ -8,16 +8,15 @@ export class PagamentoUseCase {
         private readonly pagamentoGateway: PagamentoGateway
     ) { }
 
-    async gerarPagamento(pedido: Pedido): Promise<string> {
+    async gerarPagamento(pedido: Pedido): Promise<{ transacao: Transacao, qrcode: string }> {
         const output = await this.pagamentoGateway.gerarPagamento(pedido);
-
-        await this.transacaoGateway.criar({
+        const transacao = await this.transacaoGateway.criar({
             pedido: pedido,
             valor: pedido.total,
             pagamentoStatus: new PagamentoStatus('Pendente'),
             idTransacaoExterna: output.idTransacaoExterna
         });
 
-        return output.qrCode;
+        return { transacao, qrcode: output.qrCode };
     }
 }

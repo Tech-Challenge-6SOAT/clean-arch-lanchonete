@@ -6,18 +6,19 @@ import { CheckoutUseCase, PagamentoUseCase, PedidoUseCase } from "../../../useca
 import { PlataformaPagamentoFake } from "../../../external/pagamento/plataformaPagamentoFake";
 
 export const pedidoRoutes = async (app: FastifyInstance) => {
-  const pedidoDbConnection = new PedidoDbConnection()
-  const pedidoGateway = new PedidoGateway(pedidoDbConnection)
-  const pedidoUseCase = new PedidoUseCase(pedidoGateway)
-  const produtoDbConnection = new ProdutoDbConnection()
-  const produtoGateway = new ProdutoGateway(produtoDbConnection)
+  
   const clienteDbConnection = new ClienteDbConnection()
-  const clienteGateway = new ClienteGateway(clienteDbConnection)
+  const pedidoDbConnection = new PedidoDbConnection()
+  const produtoDbConnection = new ProdutoDbConnection()
   const transacaoDbConnection = new TransacaoDbConnection()
+  const clienteGateway = new ClienteGateway(clienteDbConnection)
+  const pedidoGateway = new PedidoGateway(pedidoDbConnection)
+  const produtoGateway = new ProdutoGateway(produtoDbConnection)
   const transacaoGateway = new TransacaoGateway(transacaoDbConnection)
   const plataformaPagamentoFake = new PlataformaPagamentoFake()
   const pagamentoGateway = new PagamentoGateway(plataformaPagamentoFake)
   const pagamentoUseCase = new PagamentoUseCase(transacaoGateway, pagamentoGateway)
+  const pedidoUseCase = new PedidoUseCase(pedidoGateway, transacaoGateway)
   const checkoutUseCase = new CheckoutUseCase(pagamentoUseCase, pedidoUseCase, produtoGateway, clienteGateway)
   const pedidoController = new PedidoController(pedidoUseCase, checkoutUseCase)
 

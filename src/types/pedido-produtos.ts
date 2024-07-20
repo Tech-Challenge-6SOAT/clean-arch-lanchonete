@@ -1,5 +1,5 @@
+import { Transacao } from "../entities"
 import { Cliente } from "../entities/cliente"
-import { PagamentoStatus } from "../entities/pagamentoStatus"
 import { Produto } from "../entities/produto"
 import { Status } from "../entities/status"
 
@@ -12,5 +12,5 @@ export type PedidoProdutos = {
   status: Status
   total: number
   senha: string
-  pagamentoStatus: PagamentoStatus
+  transacao: Transacao | null
 }

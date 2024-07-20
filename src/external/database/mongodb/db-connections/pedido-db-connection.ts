@@ -36,6 +36,20 @@ export class PedidoDbConnection extends MongoDbConnection {
         },
       },
       {
+        $lookup: {
+          from: 'transacoes',
+          localField: 'transacao',
+          foreignField: '_id',
+          as: 'transacao',
+        },
+      },
+      {
+        $unwind: {
+          path: '$transacao',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $addFields: {
           statusCustomOrder: {
             $switch: {

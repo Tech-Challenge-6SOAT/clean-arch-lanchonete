@@ -8,7 +8,7 @@ export class TransacaoGateway implements ITransacaoGateway {
 		private readonly dbConnection: DbConnection
 	) { }
 
-	async criar(transacao: Omit<Transacao, "id" | "data" >): Promise<Transacao> {
+	async criar(transacao: Omit<Transacao, "id" | "data">): Promise<Transacao> {
 		const transacaoCriada = await this.dbConnection.criar<{ _id: string, createdAt: Date }>(
 			{ ...transacao, pagamentoStatus: transacao.pagamentoStatus.status }
 		);
@@ -26,12 +26,25 @@ export class TransacaoGateway implements ITransacaoGateway {
 		const transacaoAtualizada = await this.dbConnection.editar<Transacao>(params);
 		if (!transacaoAtualizada) return null;
 		return new Transacao(
-		  transacaoAtualizada.id,
-		  transacaoAtualizada.pedido,
-		  transacaoAtualizada.valor,
-		  transacaoAtualizada.pagamentoStatus,
-		  transacaoAtualizada.data,
-		  transacaoAtualizada.idTransacaoExterna,
+			transacaoAtualizada.id,
+			transacaoAtualizada.pedido,
+			transacaoAtualizada.valor,
+			transacaoAtualizada.pagamentoStatus,
+			transacaoAtualizada.data,
+			transacaoAtualizada.idTransacaoExterna,
 		);
-	  }
+	}
+
+	async buscarTransacaoPorPedidoId(pedidoId: string): Promise<Transacao | null> {
+		const transacao = await this.dbConnection.buscarUm<Transacao>({ pedido: pedidoId });
+		if (!transacao) return null;
+		return new Transacao(
+			transacao.id,
+			transacao.pedido,
+			transacao.valor,
+			transacao.pagamentoStatus,
+			transacao.data,
+			transacao.idTransacaoExterna,
+		);
+	}
 }
