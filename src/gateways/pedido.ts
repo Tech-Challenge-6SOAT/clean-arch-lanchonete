@@ -47,7 +47,7 @@ export class PedidoGateway implements IPedidoGateway {
     );
   }
 
-  async editar(params: { id: string; filter: object }): Promise<Pedido | null> {
+  async editar(params: { id: string; value: object }): Promise<Pedido | null> {
     const produtoAtualizado = await this.dbConnection.editar<Pedido>(params);
     if (!produtoAtualizado) return null;
     return new Pedido(

@@ -29,7 +29,7 @@ export class PedidoUseCase {
             throw new Error('Pedido não encontrado')
         }
 
-        return this.pedidoGateway.editar({ id: params.id, filter: { status: params.status } })
+        return this.pedidoGateway.editar({ id: params.id, value: { status: params.status } })
     }
 
     async statusPagamento(id: string): Promise<PagamentoStatus> {
