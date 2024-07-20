@@ -1,21 +1,20 @@
-import { PagamentoStatus } from "../../entities/pagamentoStatus";
-import { Produto } from "../../entities/produto";
-import { Status } from "../../entities/status";
-import { ClienteGateway } from "../../gateways";
-import { ProdutoGateway } from "../../gateways/produto";
-import { CPF } from "../../value-objects/cpf";
+import { Produto, Status, PagamentoStatus } from "../../entities";
+import { ClienteGateway, ProdutoGateway } from "../../gateways";
+import { PagamentoUseCase } from "../pagamento";
 import { PedidoUseCase } from "../pedido";
+import { CPF } from "../../value-objects/cpf";
 
 export class CheckoutUseCase {
     private _produtos: { produto: Produto, quantidade: number }[] = [];
 
     constructor(
+        private readonly pagamentoUseCase: PagamentoUseCase,
         private readonly pedidoUseCase: PedidoUseCase,
         private readonly produtoGateway: ProdutoGateway,
         private readonly clienteGateway: ClienteGateway
     ) { }
 
-    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string }> {
+    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string, qrcode: string }> {
         const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf: new CPF(String(cpf)) }) : null;
         await this._adicionarProdutos(produtos)
 
@@ -25,13 +24,13 @@ export class CheckoutUseCase {
             total: this._calcularTotalPedido(this._produtos),
             status: new Status('Recebido'),
             senha: String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
-            pagamentoStatus: new PagamentoStatus('Pendente')
         })
 
-        // TO DO: Processar pagamento
-        // TO DO: Atualizar status do pagamento do pedido
+        const { transacao, qrcode } = await this.pagamentoUseCase.gerarPagamento(pedidoCriado);
 
-        return { id: pedidoCriado.id, senha: pedidoCriado.senha };
+        await this.pedidoUseCase.adicionarTransacao({ id: pedidoCriado.id, transacao});
+
+        return { id: pedidoCriado.id, senha: pedidoCriado.senha, qrcode };
     }
 
     private async _adicionarProdutos(produtos: { id: string, quantidade: number }[]): Promise<void> {

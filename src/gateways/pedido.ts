@@ -1,3 +1,4 @@
+import { Transacao } from "../entities";
 import { Pedido } from "../entities/pedido";
 import { DbConnection } from "../interfaces/db/connection";
 import { IPedidoGateway } from "../interfaces/gateways/pedido";
@@ -15,12 +16,12 @@ export class PedidoGateway implements IPedidoGateway {
       status: pedido.status,
       total: pedido.total,
       senha: pedido.senha,
-      pagamentoStatus: pedido.pagamentoStatus
+      transacao: pedido.transacao
     }));
   }
 
   async buscarPedido(id: string): Promise<PedidoProdutos | null> {
-    const pedido = await this.dbConnection.buscarUm<Pedido>({ _id: id});
+    const pedido = await this.dbConnection.buscarUm<Pedido>({ _id: id });
     if (!pedido) return null;
     return {
       cliente: pedido.cliente,
@@ -28,13 +29,13 @@ export class PedidoGateway implements IPedidoGateway {
       status: pedido.status,
       total: pedido.total,
       senha: pedido.senha,
-      pagamentoStatus: pedido.pagamentoStatus
+      transacao: pedido.transacao
     };
   }
 
   async criar(pedido: Omit<Pedido, "id">): Promise<Pedido> {
-    const produtoCriado = await this.dbConnection.criar<{ _id: string }>(
-      {...pedido, status: pedido.status.status, pagamentoStatus: pedido.pagamentoStatus.status},
+    const produtoCriado = await this.dbConnection.criar<{ _id: string, transacao: Transacao }>(
+      { ...pedido, status: pedido.status.status },
     );
     return new Pedido(
       produtoCriado._id,
@@ -43,7 +44,7 @@ export class PedidoGateway implements IPedidoGateway {
       pedido.status,
       pedido.total,
       pedido.senha,
-      pedido.pagamentoStatus
+      produtoCriado.transacao
     );
   }
 
@@ -57,7 +58,7 @@ export class PedidoGateway implements IPedidoGateway {
       produtoAtualizado.status,
       produtoAtualizado.total,
       produtoAtualizado.senha,
-      produtoAtualizado.pagamentoStatus
+      produtoAtualizado.transacao
     );
   }
 }

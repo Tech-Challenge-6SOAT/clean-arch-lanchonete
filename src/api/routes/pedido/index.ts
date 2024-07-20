@@ -1,19 +1,25 @@
 import { FastifyInstance } from "fastify";
 import { PedidoController } from "../../../controllers/pedido";
-import { ClienteGateway, PedidoGateway, ProdutoGateway } from "../../../gateways";
-import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection } from "../../../external/database/mongodb/db-connections";
-import { PedidoUseCase } from "../../../usecases/pedido";
-import { CheckoutUseCase } from "../../../usecases/checkout";
+import { ClienteGateway, PagamentoGateway, PedidoGateway, ProdutoGateway, TransacaoGateway } from "../../../gateways";
+import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection, TransacaoDbConnection } from "../../../external/database/mongodb/db-connections";
+import { CheckoutUseCase, PagamentoUseCase, PedidoUseCase } from "../../../usecases";
+import { PlataformaPagamentoFake } from "../../../external/pagamento/plataformaPagamentoFake";
 
 export const pedidoRoutes = async (app: FastifyInstance) => {
+  
+  const clienteDbConnection = new ClienteDbConnection()
   const pedidoDbConnection = new PedidoDbConnection()
   const produtoDbConnection = new ProdutoDbConnection()
-  const clienteDbConnection = new ClienteDbConnection()
+  const transacaoDbConnection = new TransacaoDbConnection()
+  const clienteGateway = new ClienteGateway(clienteDbConnection)
   const pedidoGateway = new PedidoGateway(pedidoDbConnection)
   const produtoGateway = new ProdutoGateway(produtoDbConnection)
-  const clienteGateway = new ClienteGateway(clienteDbConnection)
-  const pedidoUseCase = new PedidoUseCase(pedidoGateway)
-  const checkoutUseCase = new CheckoutUseCase(pedidoUseCase, produtoGateway, clienteGateway)
+  const transacaoGateway = new TransacaoGateway(transacaoDbConnection)
+  const plataformaPagamentoFake = new PlataformaPagamentoFake()
+  const pagamentoGateway = new PagamentoGateway(plataformaPagamentoFake)
+  const pagamentoUseCase = new PagamentoUseCase(transacaoGateway, pagamentoGateway)
+  const pedidoUseCase = new PedidoUseCase(pedidoGateway, transacaoGateway)
+  const checkoutUseCase = new CheckoutUseCase(pagamentoUseCase, pedidoUseCase, produtoGateway, clienteGateway)
   const pedidoController = new PedidoController(pedidoUseCase, checkoutUseCase)
 
   app.get('/pedidos', {}, async function (request, reply) {
