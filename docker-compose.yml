@@ -1,6 +1,24 @@
 version: '3.7'
 
 services:
+  lanchonete:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app/src
+    working_dir: /app/src
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_HOST=mongo:27017
+      - MONGODB_USERNAME=admin
+      - MONGODB_PASSWORD=admin
+      - MONGODB_ROOT_PASSWORD=admin
+      - MONGODB_DATABASE=lanchonete
+    networks:
+      - default
+
   mongo:
     container_name: mongo-clean-arch-lanchonete
     image: 'bitnami/mongodb:4.4'
@@ -25,4 +43,4 @@ volumes:
 
 networks:
   default:
-    name: lanchonete_network
+    name: clean_arch_lanchonete_network
