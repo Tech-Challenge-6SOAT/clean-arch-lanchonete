@@ -2,12 +2,7 @@ import { Logger } from "../../logs/logger"
 import mongoose from "mongoose"
 
 const connection = () => {
-  const mongoUsername = process.env.MONGODB_USERNAME
-  const mongoPassword = process.env.MONGODB_PASSWORD
-  const mongoHost = process.env.MONGODB_HOST
-  const mongoDatabase = process.env.MONGODB_DATABASE
-  const url = `mongodb://${mongoUsername}:${mongoPassword}@${mongoHost}/${mongoDatabase}?retryWrites=true&w=majority`
-  const conn = mongoose.createConnection(url)
+  const conn = mongoose.createConnection(String(process.env.MONGODB_URL))
 
   conn.once('connected', () => {
     Logger.info('MongoDB is connected!')

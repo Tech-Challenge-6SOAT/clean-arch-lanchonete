@@ -11,11 +11,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGODB_HOST=mongo:27017
-      - MONGODB_USERNAME=admin
-      - MONGODB_PASSWORD=admin
-      - MONGODB_ROOT_PASSWORD=admin
-      - MONGODB_DATABASE=lanchonete
+      - MONGODB_URL=mongodb://admin:admin@mongo:27017/lanchonete?retryWrites=true&w=majority
     networks:
       - default
 

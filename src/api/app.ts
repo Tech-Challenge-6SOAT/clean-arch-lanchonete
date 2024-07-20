@@ -1,6 +1,7 @@
 import Fastify from 'fastify'
 import dotenv from 'dotenv'
 import routes from './routes'
+import { Logger } from '../external/logs/logger'
 
 export class App {
   static async start() {
@@ -12,6 +13,6 @@ export class App {
       port: 3000,
       host: '0.0.0.0'
     })
-    console.log('API IS RUNNING')
+    Logger.info('API IS RUNNING')
   }
 }
