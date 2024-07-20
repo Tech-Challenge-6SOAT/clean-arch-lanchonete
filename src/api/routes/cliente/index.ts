@@ -14,4 +14,9 @@ export const clienteRoutes = async (app: FastifyInstance) => {
     const response = await clienteController.criar(request)
     return reply.status(response.statusCode).send(response.data)
   })
+
+  app.get('/cliente', {}, async function (request, reply) {
+    const response = await clienteController.getCliente(request)
+    return reply.status(response.statusCode).send(response.data)
+  })
 }
