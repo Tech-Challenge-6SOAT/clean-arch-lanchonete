@@ -17,6 +17,7 @@ const Schema = new mongoose.Schema(
       type: String
     },
     idTransacaoExterna: {
+      required: true,
       type: String
     },
   },

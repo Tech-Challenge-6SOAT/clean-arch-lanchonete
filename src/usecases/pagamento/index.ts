@@ -9,14 +9,15 @@ export class PagamentoUseCase {
     ) { }
 
     async gerarPagamento(pedido: Pedido): Promise<string> {
-        const transacao = await this.transacaoGateway.criar({
+        const output = await this.pagamentoGateway.gerarPagamento(pedido);
+
+        await this.transacaoGateway.criar({
             pedido: pedido,
             valor: pedido.total,
-            pagamentoStatus: new PagamentoStatus('Pendente')
+            pagamentoStatus: new PagamentoStatus('Pendente'),
+            idTransacaoExterna: output.idTransacaoExterna
         });
 
-        const output = await this.pagamentoGateway.gerarPagamento(transacao);
-        await this.transacaoGateway.editar({id: transacao.id, value: { idTransacaoExterna: output.idTransacaoExterna }});
         return output.qrCode;
     }
 }

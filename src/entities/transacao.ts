@@ -8,7 +8,7 @@ export class Transacao {
 		private readonly _valor: number,
 		private readonly _pagamentoStatus: PagamentoStatus,
 		private readonly _data: Date,
-		private readonly _idTransacaoExterna: string | null = null,
+		private readonly _idTransacaoExterna: string,
 	) { }
 
 	get id(): string {
@@ -31,7 +31,7 @@ export class Transacao {
 		return this._data
 	}
 
-	get idTransacaoExterna(): string | null{
+	get idTransacaoExterna(): string {
 		return this._idTransacaoExterna
 	}
 }

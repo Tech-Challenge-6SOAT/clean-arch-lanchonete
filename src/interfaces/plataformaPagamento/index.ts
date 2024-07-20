@@ -1,5 +1,5 @@
-import { Transacao } from "../../entities";
+import { Pedido } from "../../entities";
 
 export interface IPlataformaPagamento {
-	executarTransacao(transacao: Transacao): Promise<{ idTransacaoExterna: string, qrCode: string }>;
+	executarTransacao(pedido: Pedido): Promise<{ idTransacaoExterna: string, qrCode: string }>;
 }

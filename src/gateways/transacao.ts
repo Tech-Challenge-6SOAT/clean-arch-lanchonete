@@ -8,7 +8,7 @@ export class TransacaoGateway implements ITransacaoGateway {
 		private readonly dbConnection: DbConnection
 	) { }
 
-	async criar(transacao: Omit<Transacao, "id" | "data" | "idTransacaoExterna">): Promise<Transacao> {
+	async criar(transacao: Omit<Transacao, "id" | "data" >): Promise<Transacao> {
 		const transacaoCriada = await this.dbConnection.criar<{ _id: string, createdAt: Date }>(
 			{ ...transacao, pagamentoStatus: transacao.pagamentoStatus.status }
 		);
@@ -18,6 +18,7 @@ export class TransacaoGateway implements ITransacaoGateway {
 			transacao.valor,
 			transacao.pagamentoStatus,
 			transacaoCriada.createdAt,
+			transacao.idTransacaoExterna
 		)
 	}
 

@@ -1,5 +1,5 @@
-import { Transacao } from "../../entities";
+import { Pedido } from "../../entities";
 
 export interface IPagamentoGateway {
-	gerarPagamento(transacao: Transacao): Promise<object>;
+	gerarPagamento(pedido: Pedido): Promise<object>;
 }
