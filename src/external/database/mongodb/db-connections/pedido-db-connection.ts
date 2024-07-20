@@ -1,14 +1,12 @@
-import { DbConnection } from "../../interfaces/db/connection";
-import { PedidoModel } from "./mongodb/models";
+import { PedidoModel } from "../models";
+import { MongoDbConnection } from "./db-connections";
 
-export class PedidoDbConnection implements DbConnection {
-  async criar<T = any>(params: Object): Promise<T> {
-    const pedido = new PedidoModel(params);
-    await pedido.save();
-    return { _id: pedido._id } as T
+export class PedidoDbConnection extends MongoDbConnection {
+  constructor () {
+    super(PedidoModel)
   }
 
-  async buscar<T = any>(params: Object): Promise<T[]> {
+  async buscar<T = any>(_params: Object): Promise<T[]> {
     const pipeline = [
       {
         $match: {
@@ -54,22 +52,5 @@ export class PedidoDbConnection implements DbConnection {
     ];
 
     return PedidoModel.aggregate(pipeline as []);
-  }
-
-  async excluir(id: string): Promise<void> {
-    await PedidoModel.findByIdAndDelete({ _id: id });
-  }
-
-  async buscarUm<T = any>(params: Object): Promise<T | null> {
-    return PedidoModel.findOne(params)
-  }
-
-  async buscarEmConjuntoCom<T = any>(params: Object, juntarCom: string): Promise<T[]> {
-    return []
-  }
-
-  async editar<T = any>(params: { id: string, filter: object }): Promise<T | null> {
-    const { id, filter } = params
-    return PedidoModel.findByIdAndUpdate(id, filter, { new: true })
   }
 }

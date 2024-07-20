@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { PedidoController } from "../../../controllers/pedido";
 import { ClienteGateway, PedidoGateway, ProdutoGateway } from "../../../gateways";
-import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection } from "../../../external/database";
+import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection } from "../../../external/database/mongodb/db-connections";
 import { PedidoUseCase } from "../../../usecases/pedido";
 import { CheckoutUseCase } from "../../../usecases/checkout";
 

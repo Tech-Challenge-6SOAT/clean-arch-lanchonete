@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ClienteController } from "../../../controllers/cliente";
 import { ClienteGateway } from "../../../gateways/cliente";
-import { ClienteDbConnection } from "../../../external/database";
+import { ClienteDbConnection } from "../../../external/database/mongodb/db-connections";
 import { ClienteUseCase } from "../../../usecases/cliente";
 
 export const clienteRoutes = async (app: FastifyInstance) => {
