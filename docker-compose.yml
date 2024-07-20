@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  mongo:
+    container_name: mongo-clean-arch-lanchonete
+    image: 'bitnami/mongodb:4.4'
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - 'mongodb_lanchonete_data:/bitnami/mongodb'
+    environment:
+      - MONGODB_ROOT_USER=admin
+      - MONGODB_ROOT_PASSWORD=admin
+      - MONGODB_USERNAME=admin
+      - MONGODB_PASSWORD=admin
+      - MONGODB_DATABASE=lanchonete
+
+    networks:
+      - default
+
+volumes:
+  mongodb_lanchonete_data:
+    driver: local
+
+networks:
+  default:
+    name: lanchonete_network

@@ -10,7 +10,11 @@ export class ClienteGateway implements IClienteGateway {
   ) {}
 
   async criarCliente(cliente: Omit<Cliente, "id">): Promise<Cliente> {
-    const createdCliente = await this.dbConnection.criar<{ _id: string }>(cliente)
+    const createdCliente = await this.dbConnection.criar<{ _id: string }>({
+      nome: cliente.nome,
+      email: cliente.email?.getValue(),
+      cpf: cliente.cpf?.getValue(),
+    })
     return new Cliente(
       createdCliente._id,
       cliente.nome,
@@ -20,16 +24,16 @@ export class ClienteGateway implements IClienteGateway {
   }
 
   async buscarCliente(busca: { cpf?: CPF, email?: Email }): Promise<Cliente | null> {
-    if (!busca.cpf && busca.email) {
+    if (!busca.cpf && !busca.email) {
       throw new Error('CPF ou Email devem ser fornecidos')
     }
 
     if (busca.cpf) {
-      const cliente = await this._buscaHelper({ cpf: busca.cpf })
+      const cliente = await this._buscaHelper({ cpf: busca.cpf.getValue() })
       return cliente
     }
 
-    const cliente = await this._buscaHelper({ email: busca.email })
+    const cliente = await this._buscaHelper({ email: busca.email?.getValue() })
     return cliente
   }
 

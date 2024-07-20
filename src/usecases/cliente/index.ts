@@ -31,4 +31,21 @@ export class ClienteUseCase {
     const createdCliente = await this.clienteGateway.criarCliente(validParams)
     return createdCliente
   }
+
+  async getCliente (params: { cpf: string, email: string }) {
+    const validParams: { cpf?: CPF, email?: Email } = {}
+
+    if (params.cpf) {
+      validParams.cpf = new CPF(String(params.cpf))
+    }
+
+    if (params.email) {
+      validParams.email = new Email(String(params.email))
+    }
+
+    return this.clienteGateway.buscarCliente({
+      email: validParams.email,
+      cpf: validParams.cpf
+    })
+  }
 }

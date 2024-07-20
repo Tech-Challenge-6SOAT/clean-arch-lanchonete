@@ -45,5 +45,46 @@ export class ClienteController {
       }
     }
   }
+
+  async getCliente (request: HttpRequest): Promise<HttpResponse> {
+    try {
+      const { cpf, email } = request.query
+
+      if (!cpf && !email) {
+        return {
+          data: {
+            message: 'Cpf ou Email são obrigatórios!'
+          },
+          statusCode: 400
+        }
+      }
+
+      const cliente = await this.clienteUseCase.getCliente({
+        cpf,
+        email
+      })
+
+      if (!cliente) {
+        return {
+          data: {
+            message: 'Cliente não encontrado!'
+          },
+          statusCode: 404
+        }
+      }
+
+      return {
+        data: cliente,
+        statusCode: 200
+      }
+    } catch (err: any) {
+      return {
+        data: {
+          message: err?.message
+        },
+        statusCode: 500
+      }
+    }
+  }
 }
 
