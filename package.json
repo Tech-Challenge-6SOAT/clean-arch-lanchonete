@@ -11,9 +11,9 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3"
-    
   },
   "dependencies": {
     "@types/node": "^20.14.10",
@@ -21,6 +21,7 @@
     "fastify": "^4.28.1",
     "mongoose": "^8.3.4",
     "pino": "^9.0.0",
-    "pino-pretty": "^11.0.0"
+    "pino-pretty": "^11.0.0",
+    "qrcode": "^1.5.3"
   }
 }

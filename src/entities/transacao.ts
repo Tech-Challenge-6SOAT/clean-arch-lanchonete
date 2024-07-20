@@ -8,6 +8,7 @@ export class Transacao {
 		private readonly _valor: number,
 		private readonly _pagamentoStatus: PagamentoStatus,
 		private readonly _data: Date,
+		private readonly _idTransacaoExterna: string | null = null,
 	) { }
 
 	get id(): string {
@@ -28,5 +29,9 @@ export class Transacao {
 
 	get data(): Date {
 		return this._data
+	}
+
+	get idTransacaoExterna(): string | null{
+		return this._idTransacaoExterna
 	}
 }

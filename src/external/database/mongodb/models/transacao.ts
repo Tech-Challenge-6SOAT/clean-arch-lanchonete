@@ -16,6 +16,9 @@ const Schema = new mongoose.Schema(
       required: true,
       type: String
     },
+    idTransacaoExterna: {
+      type: String
+    },
   },
   {
     timestamps: true,

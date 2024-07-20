@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
 import { PedidoController } from "../../../controllers/pedido";
-import { ClienteGateway, PedidoGateway, ProdutoGateway, TransacaoGateway } from "../../../gateways";
+import { ClienteGateway, PagamentoGateway, PedidoGateway, ProdutoGateway, TransacaoGateway } from "../../../gateways";
 import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection, TransacaoDbConnection } from "../../../external/database/mongodb/db-connections";
 import { CheckoutUseCase, PagamentoUseCase, PedidoUseCase } from "../../../usecases";
+import { PlataformaPagamentoFake } from "../../../external/pagamento/plataformaPagamentoFake";
 
 export const pedidoRoutes = async (app: FastifyInstance) => {
   const pedidoDbConnection = new PedidoDbConnection()
@@ -14,7 +15,9 @@ export const pedidoRoutes = async (app: FastifyInstance) => {
   const clienteGateway = new ClienteGateway(clienteDbConnection)
   const transacaoDbConnection = new TransacaoDbConnection()
   const transacaoGateway = new TransacaoGateway(transacaoDbConnection)
-  const pagamentoUseCase = new PagamentoUseCase(transacaoGateway)
+  const plataformaPagamentoFake = new PlataformaPagamentoFake()
+  const pagamentoGateway = new PagamentoGateway(plataformaPagamentoFake)
+  const pagamentoUseCase = new PagamentoUseCase(transacaoGateway, pagamentoGateway)
   const checkoutUseCase = new CheckoutUseCase(pagamentoUseCase, pedidoUseCase, produtoGateway, clienteGateway)
   const pedidoController = new PedidoController(pedidoUseCase, checkoutUseCase)
 
