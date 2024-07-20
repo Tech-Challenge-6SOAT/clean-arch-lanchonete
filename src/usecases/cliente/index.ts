@@ -9,11 +9,6 @@ export class ClienteUseCase {
   ) {}
 
   async criar (params: Omit<Cliente, "id">): Promise<Cliente> {
-    const cliente = await this.clienteGateway.buscarCliente(params)
-    if (cliente) {
-      return cliente
-    }
-
     const validParams = {
       cpf: params.cpf,
       email: params.email,
@@ -26,6 +21,11 @@ export class ClienteUseCase {
 
     if (params.email) {
       validParams.email = new Email(String(params.email))
+    }
+
+    const cliente = await this.clienteGateway.buscarCliente(validParams)
+    if (cliente) {
+      return cliente
     }
 
     const createdCliente = await this.clienteGateway.criarCliente(validParams)

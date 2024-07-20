@@ -16,7 +16,7 @@ export class CheckoutUseCase {
     ) { }
 
     async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string }> {
-        const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf }) : null;
+        const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf: new CPF(String(cpf)) }) : null;
         await this._adicionarProdutos(produtos)
 
         const pedidoCriado = await this.pedidoUseCase.criar({
