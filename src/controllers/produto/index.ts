@@ -32,7 +32,7 @@ export class ProdutoController {
           data: {
             message: "Produto não encontrado",
           },
-          statusCode: 200,
+          statusCode: 404,
         };
       }
 
@@ -59,7 +59,6 @@ export class ProdutoController {
 
   async buscarProdutoPorCategoria(request: HttpRequest): Promise<HttpResponse> {
     try {
-      console.log(request.body);
       const { categoria } = request.body;
 
       if (!categoria) {
