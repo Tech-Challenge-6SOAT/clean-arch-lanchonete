@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { FakeDb } from "../../../external/fake-db";
 import { ProdutoGateway } from "../../../gateways/produto";
 import { ProdutoUseCase } from "../../../usecases/produto";
 import { ProdutoController } from "../../../controllers/produto";
+import { ProdutoDbConnection } from "../../../external/database/mongodb/db-connections";
 
 export const produtoRoutes = async (app: FastifyInstance) => {
-  const dbConnection = new FakeDb();
+  const dbConnection = new ProdutoDbConnection();
   const produtoGateWay = new ProdutoGateway(dbConnection);
   const produtouseCase = new ProdutoUseCase(produtoGateWay);
   const produtoController = new ProdutoController(produtouseCase);

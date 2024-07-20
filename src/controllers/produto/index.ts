@@ -53,7 +53,7 @@ export class ProdutoController {
 
   async buscarProdutoPorCategoria(request: HttpRequest): Promise<HttpResponse> {
     try {
-      const { categoria } = request.body;
+      const { categoria } = request.query;
 
       if (!categoria) {
         return {
