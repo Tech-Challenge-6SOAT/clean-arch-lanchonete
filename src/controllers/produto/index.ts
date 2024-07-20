@@ -1,16 +1,10 @@
 import { HttpRequest, HttpResponse } from "../../interfaces/http";
 import { ProdutoUseCase } from "../../usecases/produto";
 
-interface CustomHttpRequest extends Request {
-  params: {
-    id: string;
-  };
-}
-
 export class ProdutoController {
   constructor(private readonly produtoUseCase: ProdutoUseCase) {}
 
-  async buscarProdutoPorId(request: CustomHttpRequest): Promise<HttpResponse> {
+  async buscarProdutoPorId(request: HttpRequest): Promise<HttpResponse> {
     try {
       const { id } = request.params;
 
