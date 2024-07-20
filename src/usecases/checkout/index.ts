@@ -1,21 +1,20 @@
-import { PagamentoStatus } from "../../entities/pagamentoStatus";
-import { Produto } from "../../entities/produto";
-import { Status } from "../../entities/status";
-import { ClienteGateway } from "../../gateways";
-import { ProdutoGateway } from "../../gateways/produto";
-import { CPF } from "../../value-objects/cpf";
+import { Produto, Status, PagamentoStatus } from "../../entities";
+import { ClienteGateway, ProdutoGateway } from "../../gateways";
+import { PagamentoUseCase } from "../pagamento";
 import { PedidoUseCase } from "../pedido";
+import { CPF } from "../../value-objects/cpf";
 
 export class CheckoutUseCase {
     private _produtos: { produto: Produto, quantidade: number }[] = [];
 
     constructor(
+        private readonly pagamentoUseCase: PagamentoUseCase,
         private readonly pedidoUseCase: PedidoUseCase,
         private readonly produtoGateway: ProdutoGateway,
         private readonly clienteGateway: ClienteGateway
     ) { }
 
-    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string }> {
+    async checkout({ produtos, cpf }: { produtos: { id: string, quantidade: number }[], cpf: CPF }): Promise<{ id: string, senha: string, qrcode: string }> {
         const cliente = cpf ? await this.clienteGateway.buscarCliente({ cpf: new CPF(String(cpf)) }) : null;
         await this._adicionarProdutos(produtos)
 
@@ -28,10 +27,12 @@ export class CheckoutUseCase {
             pagamentoStatus: new PagamentoStatus('Pendente')
         })
 
+        const qrcode = await this.pagamentoUseCase.gerarPagamento(pedidoCriado);
+
         // TO DO: Processar pagamento
         // TO DO: Atualizar status do pagamento do pedido
 
-        return { id: pedidoCriado.id, senha: pedidoCriado.senha };
+        return { id: pedidoCriado.id, senha: pedidoCriado.senha, qrcode };
     }
 
     private async _adicionarProdutos(produtos: { id: string, quantidade: number }[]): Promise<void> {
