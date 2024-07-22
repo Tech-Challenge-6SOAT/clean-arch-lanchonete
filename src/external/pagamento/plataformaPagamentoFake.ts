@@ -8,4 +8,13 @@ export class PlataformaPagamentoFake implements IPlataformaPagamento {
         const qrCode = await QRCode.toDataURL("https://pagamentofake.com.br")
         return { idTransacaoExterna: randomUUID(), qrCode }
     }
+
+    converterMensagemWebhook(mensagem: { id: string, status: string }): { idTransacaoExterna: string; pagamentoStatus: string } {
+        const STATUS: Record<string, string> = {
+            'paid': 'Aprovado',
+            'refused': 'Recusado',
+            'waiting_payment': 'Pendente',
+        };
+        return { idTransacaoExterna: mensagem.id, pagamentoStatus: STATUS[mensagem.status] }
+    }
 }

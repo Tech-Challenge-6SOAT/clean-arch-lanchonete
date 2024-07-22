@@ -47,4 +47,17 @@ export class TransacaoGateway implements ITransacaoGateway {
 			transacao.idTransacaoExterna,
 		);
 	}
+
+	async buscarPorIdTransacaoExterna(idTransacaoExterna: string): Promise<Transacao | null> {
+		const transacao = await this.dbConnection.buscarUm<Transacao>({ idTransacaoExterna: idTransacaoExterna });
+		if (!transacao) return null;
+		return new Transacao(
+			transacao.id,
+			transacao.pedido,
+			transacao.valor,
+			transacao.pagamentoStatus,
+			transacao.data,
+			transacao.idTransacaoExterna,
+		);
+	}
 }
