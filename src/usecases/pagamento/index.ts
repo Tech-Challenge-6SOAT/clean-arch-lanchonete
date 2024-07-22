@@ -19,4 +19,11 @@ export class PagamentoUseCase {
 
         return { transacao, qrcode: output.qrCode };
     }
+
+    async atualizarStatusPagamento(body: object): Promise<void> {
+        const { idTransacaoExterna, pagamentoStatus } = this.pagamentoGateway.converterMensagemWebhook(body);
+        const transacao = await this.transacaoGateway.buscarPorIdTransacaoExterna(idTransacaoExterna);
+        if (!transacao) throw new Error('Transação não encontrada');
+        await this.transacaoGateway.editar({ id: transacao.id, value: { pagamentoStatus: pagamentoStatus.status } });
+    }
 }

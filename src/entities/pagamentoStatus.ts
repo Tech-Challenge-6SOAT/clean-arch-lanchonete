@@ -1,4 +1,4 @@
-type PagamentoStatusEnum = 'Aprovado' | 'Recusado' | 'Pendente'
+export type PagamentoStatusEnum = 'Aprovado' | 'Recusado' | 'Pendente'
 
 export class PagamentoStatus {
   constructor (
