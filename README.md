@@ -7,6 +7,6 @@ Projeto de arquitetura limpa do curso de pós graduação da FIAP
 
 ## K8s
 - Instale o minikube
-- Inicie o minibuke ```bash minikube start```
-- Habilite as métricas ```bash minikube addons enable metrics-server```
-- Execute ```bash ./k8s/deploy.sh```
+- Inicie o minibuke ```minikube start```
+- Habilite as métricas ```minikube addons enable metrics-server```
+- Execute ```./k8s/deploy.sh```
