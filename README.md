@@ -3,8 +3,13 @@ Projeto de arquitetura limpa do curso de pós graduação da FIAP
 
 # Como rodar o projeto?
 ## Docker compose
+- Para iniciar
 ```bash
 docker compose up
+```
+- Para encerrar
+```bash
+docker compose down
 ```
 
 ## K8s
@@ -25,3 +30,11 @@ chmod +x ./k8s/deploy.sh
 ```bash
 ./k8s/deploy.sh
 ```
+- Faça o port forward da aplicação
+```bash
+kubectl port-forward service/nodejs-app-svc 3000:3000 -n lanchonete
+```
+- Para encerrar a aplicação
+ ```bash
+kubectl delete namespace lanchonete
+``` 
