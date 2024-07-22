@@ -8,3 +8,4 @@ kubectl apply -f "$K8S_DIR/mongodb-deployment.yaml" -n lanchonete
 kubectl apply -f "$K8S_DIR/mongodb-service.yaml" -n lanchonete
 kubectl apply -f "$K8S_DIR/deployment.yaml" -n lanchonete
 kubectl apply -f "$K8S_DIR/service.yaml" -n lanchonete
+kubectl apply -f "$K8S_DIR/hpa.yaml" -n lanchonete
