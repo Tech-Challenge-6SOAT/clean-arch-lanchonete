@@ -20,8 +20,7 @@ export const produtoRoutes = async (app: FastifyInstance) => {
     return reply.status(response.statusCode).send(response.data);
   });
 
-  app.get("/produto/:id", {
-  }, async function (request, reply) {
+  app.get("/produto/:id", {}, async function (request, reply) {
     const response = await produtoController.buscarProdutoPorId(request);
     return reply.status(response.statusCode).send(response.data);
   });
