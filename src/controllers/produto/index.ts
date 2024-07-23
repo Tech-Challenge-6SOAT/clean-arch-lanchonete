@@ -1,3 +1,4 @@
+import { Produto } from "../../entities";
 import { HttpRequest, HttpResponse } from "../../interfaces/http";
 import { ProdutoUseCase } from "../../usecases/produto";
 
@@ -64,13 +65,17 @@ export class ProdutoController {
         };
       }
 
-      const produto = await this.produtoUseCase.buscarProdutoPorCategoria({
+      const produtos = await this.produtoUseCase.buscarProdutoPorCategoria({
         categoria,
       });
       return {
-        data: {
-          produtos: produto,
-        },
+        data: produtos.map(produto => ({
+          id: produto.id,
+          categoria: produto.categoria.categoria,
+          nome: produto.nome,
+          preco: produto.preco,
+          descricao: produto.descricao
+        })),
         statusCode: 200,
       };
     } catch (err: any) {
@@ -105,12 +110,11 @@ export class ProdutoController {
 
       return {
         data: {
-          produto: {
-            id: produto.id,
-            nome: produto.nome,
-            categoria: produto.categoria,
-            preco: produto.preco,
-          },
+          id: produto.id,
+          nome: produto.nome,
+          categoria: produto.categoria,
+          preco: produto.preco,
+          descricao: produto.descricao
         },
         statusCode: 201,
       };
@@ -145,7 +149,7 @@ export class ProdutoController {
         data: {
           message: "Produto excluído com sucesso!",
         },
-        statusCode: 200,
+        statusCode: 204,
       };
     } catch (err: any) {
       return {
@@ -154,6 +158,41 @@ export class ProdutoController {
         },
         statusCode: 500,
       };
+    }
+  }
+
+  async editar(request: HttpRequest): Promise<HttpResponse> {
+    try {
+      const { categoria, nome, preco, descricao  } = request.body
+      const { id } = request.params
+
+      const newProduto = new Produto(
+        id,
+        categoria,
+        nome,
+        preco,
+        descricao
+      )
+
+      await this.produtoUseCase.editar(newProduto)
+
+      return {
+        data: {
+          id,
+          categoria,
+          nome,
+          preco,
+          descricao
+        },
+        statusCode: 200
+      }
+    } catch (err: any) {
+      return {
+        data: {
+          err: err?.message
+        },
+        statusCode: 500
+      }
     }
   }
 }

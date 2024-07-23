@@ -1,8 +1,6 @@
 import { Categoria } from "../../entities/categoria";
 import { Produto } from "../../entities/produto";
 import { ProdutoGateway } from "../../gateways/produto";
-import { CPF } from "../../value-objects/cpf";
-import { Email } from "../../value-objects/email";
 
 export class ProdutoUseCase {
   constructor(private readonly produtoGateway: ProdutoGateway) {}
@@ -38,5 +36,9 @@ export class ProdutoUseCase {
 
   async excluir(params: { id: string }): Promise<void> {
     await this.produtoGateway.excluir(params.id);
+  }
+
+  async editar(params: Produto) {
+    return this.produtoGateway.editar(params)
   }
 }

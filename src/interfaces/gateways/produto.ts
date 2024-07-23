@@ -6,5 +6,6 @@ export interface IProdutoGateway {
   buscarProdutoPorId(id: string): Promise<Produto | null>
   criar(produto: Omit<Produto, 'id'>): Promise<Produto>
   excluir(id: string): Promise<void>
+  editar(produto: Produto): Promise<Produto>
 }
 

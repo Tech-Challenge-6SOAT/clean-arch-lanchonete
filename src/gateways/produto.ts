@@ -70,4 +70,18 @@ export class ProdutoGateway implements IProdutoGateway {
   async excluir(id: string): Promise<void> {
     return this.dbConnection.excluir(id)
   }
+
+  async editar(produto: Produto): Promise<Produto> {
+    await this.dbConnection.editar({
+      id: produto.id,
+      value: {
+        nome: produto.nome,
+        preco: produto.preco,
+        descricao: produto.descricao,
+        categoria: produto.categoria
+      }
+    })
+
+    return produto
+  }
 }
