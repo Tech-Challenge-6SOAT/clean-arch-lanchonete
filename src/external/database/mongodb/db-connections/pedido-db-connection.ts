@@ -32,9 +32,37 @@ export class PedidoDbConnection extends MongoDbConnection {
           from: 'produtos',
           localField: 'produtos.produto',
           foreignField: '_id',
-          as: 'produtos',
+          as: 'produtoDetalhes',
         },
       },
+      {
+        $addFields: {
+          produtos: {
+            $map: {
+              input: "$produtos",
+              as: "one",
+              in: {
+                $mergeObjects: [
+                  "$$one",
+                  {
+                    $arrayElemAt: [
+                      {
+                        $filter: {
+                          input: "$produtoDetalhes",
+                          as: "two",
+                          cond: { $eq: ["$$two._id", "$$one.produto"] }
+                        }
+                      },
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      { $unset: [ "produtoDetalhes", "produtos.produto" ] },
       {
         $lookup: {
           from: 'transacoes',
@@ -62,6 +90,7 @@ export class PedidoDbConnection extends MongoDbConnection {
           },
         },
       },
+      { $addFields: { id: '$_id' } },
       { $sort: { statusCustomOrder: 1, createdAt: 1 } },
     ];
 

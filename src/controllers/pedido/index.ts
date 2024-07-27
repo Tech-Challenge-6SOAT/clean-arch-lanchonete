@@ -13,9 +13,7 @@ export class PedidoController {
       const pedidos = await this.pedidoUseCase.buscarPedidos();
 
       return {
-        data: {
-          pedidos,
-        },
+        data: pedidos,
         statusCode: 200,
       };
     } catch (err: any) {
@@ -40,7 +38,8 @@ export class PedidoController {
 
       return {
         data: {
-          pedido,
+            status: pedido?.status,
+            senha: pedido?.senha,
         },
         statusCode: 200,
       };

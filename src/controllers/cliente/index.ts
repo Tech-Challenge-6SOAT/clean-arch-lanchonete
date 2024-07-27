@@ -27,12 +27,10 @@ export class ClienteController {
 
       return {
         data: {
-          cliente: {
-            id: cliente.id,
-            nome: cliente.nome,
-            cpf: cliente.cpf?.getValue(),
-            email: cliente.email?.getValue()
-          }
+          id: cliente.id,
+          nome: cliente.nome,
+          cpf: cliente.cpf?.getValue(),
+          email: cliente.email?.getValue()
         },
         statusCode: 201
       }
@@ -75,7 +73,8 @@ export class ClienteController {
 
       return {
         data: {
-          ...cliente,
+          id: cliente.id,
+          nome: cliente.nome,
           cpf: cliente.cpf?.getValue(),
           email: cliente.email?.getValue()
         },

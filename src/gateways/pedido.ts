@@ -11,6 +11,7 @@ export class PedidoGateway implements IPedidoGateway {
     const pedidos = await this.dbConnection.buscar<Pedido>({});
 
     return pedidos.map((pedido) => ({
+      id: pedido.id,
       cliente: pedido.cliente,
       produtos: pedido.produtos,
       status: pedido.status,
