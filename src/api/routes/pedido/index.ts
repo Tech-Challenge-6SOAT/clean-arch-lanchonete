@@ -4,6 +4,8 @@ import { ClienteGateway, PagamentoGateway, PedidoGateway, ProdutoGateway, Transa
 import { PedidoDbConnection, ProdutoDbConnection, ClienteDbConnection, TransacaoDbConnection } from "../../../external/database/mongodb/db-connections";
 import { CheckoutUseCase, PagamentoUseCase, PedidoUseCase } from "../../../usecases";
 import { PlataformaPagamentoFake } from "../../../external/pagamento/plataformaPagamentoFake";
+import { atualizarStatusPedidoSchema, buscarPedidosSchema, checkoutSchema, statusPagamentoSchema } from "./schema";
+import { validatorCompiler } from '../../validators/ajv'
 
 export const pedidoRoutes = async (app: FastifyInstance) => {
   
@@ -22,22 +24,34 @@ export const pedidoRoutes = async (app: FastifyInstance) => {
   const checkoutUseCase = new CheckoutUseCase(pagamentoUseCase, pedidoUseCase, produtoGateway, clienteGateway)
   const pedidoController = new PedidoController(pedidoUseCase, checkoutUseCase)
 
-  app.get('/pedidos', {}, async function (request, reply) {
+  app.get('/pedidos', {
+    schema: buscarPedidosSchema,
+    validatorCompiler
+  }, async function (request, reply) {
     const response = await pedidoController.buscarPedidos(request)
     return reply.status(response.statusCode).send(response.data)
   })
 
-  app.get('/pedido/:id/status-pagamento', {}, async function (request, reply) {
+  app.get('/pedido/:id/status-pagamento', {
+    schema: statusPagamentoSchema,
+    validatorCompiler
+  }, async function (request, reply) {
     const response = await pedidoController.statusPagamento(request)
     return reply.status(response.statusCode).send(response.data)
   })
 
-  app.patch('/pedido/:id/status', {}, async function (request, reply) {
+  app.patch('/pedido/:id/status', {
+    schema: atualizarStatusPedidoSchema,
+    validatorCompiler
+  }, async function (request, reply) {
     const response = await pedidoController.atualizarStatusPedido(request)
     return reply.status(response.statusCode).send(response.data)
   })
 
-  app.post('/pedido/checkout', {}, async function (request, reply) {
+  app.post('/pedido/checkout', {
+    schema: checkoutSchema,
+    validatorCompiler
+  }, async function (request, reply) {
     const response = await pedidoController.checkout(request)
     return reply.status(response.statusCode).send(response.data)
   })
