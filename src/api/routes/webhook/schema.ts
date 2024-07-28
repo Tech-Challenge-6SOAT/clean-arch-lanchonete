@@ -1,5 +1,5 @@
 export const atualizarStatusPagamentoSchema = {
-  tags: ["pedido"],
+  tags: ["webhook"],
   body: {
     type: "object",
     properties: {
