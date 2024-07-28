@@ -41,3 +41,7 @@ kubectl delete namespace lanchonete
 
 # Swagger
 http://localhost:3000/documentation
+
+# Desenho da Arquitetura
+
+![Desenho da Arquitetura](arquitetura-lanchonete.png)
