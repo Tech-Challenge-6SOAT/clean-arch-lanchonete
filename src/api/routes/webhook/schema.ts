@@ -19,8 +19,11 @@ export const atualizarStatusPagamentoSchema = {
       type: "object",
       properties: {
         id: { type: "string" },
-        senha: { type: "string" },
-        qrcode: { type: "string" },
+        pedido: { type: "string" },
+        valor: { type: "number" },
+        pagamentoStatus: { type: "string" },
+        data: { type: "string", format: "date-time" },
+        idTransacaoExterna: { type: "string" },
       },
     },
   },
