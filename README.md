@@ -1,6 +1,12 @@
 # Clean Arch Lanchonete
 Projeto de arquitetura limpa do curso de pós graduação da FIAP
 
+# Link do vídeo de demonstração da arquitetura
+https://youtu.be/y1YiBKXGW_Y
+
+# Desenho da Arquitetura
+![Desenho da Arquitetura](arquitetura-lanchonete.png)
+
 # Como rodar o projeto?
 ## Docker compose
 - Para iniciar
@@ -42,6 +48,3 @@ kubectl delete namespace lanchonete
 # Swagger
 http://localhost:3000/documentation
 
-# Desenho da Arquitetura
-
-![Desenho da Arquitetura](arquitetura-lanchonete.png)
