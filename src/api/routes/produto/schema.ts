@@ -36,6 +36,30 @@ export const getProdutosByCategoriaSchema = {
   },
 };
 
+export const getProdutoByIdSchema = {
+  tags: ["produto"],
+  params: {
+    type: "object",
+    properties: {
+      id: {
+        type: "string"
+      }
+    }
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        id: { type: "string" },
+        categoria: { type: "string" },
+        nome: { type: "string" },
+        preco: { type: "number" },
+        descricao: { type: "string" },
+      },
+    },
+  },
+};
+
 export const createProdutoSchema = {
   tags: ["produto"],
   body: {

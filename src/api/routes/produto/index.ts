@@ -3,7 +3,7 @@ import { ProdutoGateway } from "../../../gateways/produto";
 import { ProdutoUseCase } from "../../../usecases/produto";
 import { ProdutoController } from "../../../controllers/produto";
 import { ProdutoDbConnection } from "../../../external/database/mongodb/db-connections";
-import { editProdutoSchema, createProdutoSchema, deleteProdutoSchema, getProdutosByCategoriaSchema } from "./schema";
+import { editProdutoSchema, createProdutoSchema, deleteProdutoSchema, getProdutosByCategoriaSchema, getProdutoByIdSchema } from "./schema";
 import { validatorCompiler } from "../../validators/ajv"
 
 export const produtoRoutes = async (app: FastifyInstance) => {
@@ -20,7 +20,10 @@ export const produtoRoutes = async (app: FastifyInstance) => {
     return reply.status(response.statusCode).send(response.data);
   });
 
-  app.get("/produto/:id", {}, async function (request, reply) {
+  app.get("/produto/:id", {
+    schema: getProdutoByIdSchema,
+    validatorCompiler
+  }, async function (request, reply) {
     const response = await produtoController.buscarProdutoPorId(request);
     return reply.status(response.statusCode).send(response.data);
   });

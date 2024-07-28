@@ -33,12 +33,10 @@ export class ProdutoController {
 
       return {
         data: {
-          produto: {
-            id: produto.id,
-            nome: produto.nome,
-            categoria: produto.categoria,
-            preco: produto.preco,
-          },
+          id: produto.id,
+          nome: produto.nome,
+          categoria: produto.categoria.categoria,
+          preco: produto.preco,
         },
         statusCode: 200,
       };
@@ -163,7 +161,7 @@ export class ProdutoController {
 
   async editar(request: HttpRequest): Promise<HttpResponse> {
     try {
-      const { categoria, nome, preco, descricao  } = request.body
+      const { categoria, nome, preco, descricao } = request.body
       const { id } = request.params
 
       const newProduto = new Produto(
